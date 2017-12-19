@@ -89,7 +89,7 @@ Maintainer: Miguel Luis, Gregory Cristian and Wael Guibene
  * LoRaWAN Adaptive Data Rate
  * @note Please note that when ADR is enabled the end-device should be static
  */
-#define LORAWAN_ADR_ON                              1
+#define LORAWAN_ADR_ON                              0
 /*!
  * LoRaWAN confirmed messages
  */
@@ -98,11 +98,11 @@ Maintainer: Miguel Luis, Gregory Cristian and Wael Guibene
  * LoRaWAN application port
  * @note do not use 224. It is reserved for certification
  */
-#define LORAWAN_APP_PORT                            2
+#define LORAWAN_APP_PORT                            210
 /*!
  * Number of trials for the join request.
  */
-#define JOINREQ_NBTRIALS                            3
+#define JOINREQ_NBTRIALS                            5
 
 /* Private macro -------------------------------------------------------------*/
 /* Private function prototypes -----------------------------------------------*/
@@ -141,7 +141,7 @@ static  LoRaParam_t LoRaParamInit= {TX_ON_TIMER,
                                     APP_TX_DUTYCYCLE,
                                     CLASS_A,
                                     LORAWAN_ADR_ON,
-                                    DR_0,
+                                    DR_5,
                                     LORAWAN_PUBLIC_NETWORK,
                                     JOINREQ_NBTRIALS};
 
@@ -172,7 +172,7 @@ int main( void )
   /* Configure the Lora Stack*/
   lora_Init( &LoRaMainCallbacks, &LoRaParamInit);
   
-  PRINTF("First LoRa Test! \n");
+  PRINTF("First LoRa Test!\n");
 
   /* main loop*/
   while( 1 )
