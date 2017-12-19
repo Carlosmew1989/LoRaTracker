@@ -89,7 +89,7 @@ Maintainer: Miguel Luis, Gregory Cristian and Wael Guibene
  * LoRaWAN Adaptive Data Rate
  * @note Please note that when ADR is enabled the end-device should be static
  */
-#define LORAWAN_ADR_ON                              0
+#define LORAWAN_ADR_ON                           ENABLE
 /*!
  * LoRaWAN confirmed messages
  */
@@ -141,7 +141,7 @@ static  LoRaParam_t LoRaParamInit= {TX_ON_TIMER,
                                     APP_TX_DUTYCYCLE,
                                     CLASS_A,
                                     LORAWAN_ADR_ON,
-                                    DR_5,
+                                    DR_0,
                                     LORAWAN_PUBLIC_NETWORK,
                                     JOINREQ_NBTRIALS};
 
