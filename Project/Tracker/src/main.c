@@ -172,7 +172,6 @@ int main( void )
   /* Configure the Lora Stack*/
   lora_Init( &LoRaMainCallbacks, &LoRaParamInit);
   
-  PRINTF("VERSION: %X\n\r", VERSION);
   PRINTF("First LoRa Test! \n");
 
   /* main loop*/
