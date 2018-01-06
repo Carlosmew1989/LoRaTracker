@@ -110,7 +110,7 @@ void DBG_Init( void )
   */
 void Error_Handler(void)
 {
-  DBG_PRINTF("Error_Handler\n\r");
+  PRINTF("Error_Handler\n\r");
   while(1);
 }
 

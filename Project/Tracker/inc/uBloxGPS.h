@@ -1,0 +1,22 @@
+#ifndef __UBLOX_GPS_H__
+#define __UBLOX_GPS_H__
+
+#define GPS_USART USART1;
+#define USARTx_CLK_ENABLE() __HAL_RCC_USART1_CLK_ENABLE()
+#define USARTx_TX_RX_CLK_ENABLE() __HAL_RCC_GPIOA_CLK_ENABLE()
+
+#define USARTx_TX_PIN GPIO_PIN_9
+#define USARTx_TX_PIN_PORT GPIOA
+
+#define USARTx_RX_PIN GPIO_PIN_10
+#define USARTx_RX_PIN_PORT GPIOA
+
+#define USARTx_AF GPIO_AF4_USART1
+
+#define GPS_READ_BUF_SIZE 100
+
+void GPSInit();
+
+void GPSRead();
+
+#endif /* __UBLOX_GPS_H__ */

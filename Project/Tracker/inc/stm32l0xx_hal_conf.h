@@ -160,8 +160,8 @@
   * @brief This is the HAL system configuration section
   */     
 #define  VDD_VALUE                    ((uint32_t)3300) /*!< Value of VDD in mv */
+#define  USE_RTOS                     0
 #define  TICK_INT_PRIORITY            (((uint32_t)1<<__NVIC_PRIO_BITS) - 1)    /*!< tick interrupt priority */            
-#define  USE_RTOS                     0     
 #define  PREFETCH_ENABLE              1              
 #define  PREREAD_ENABLE               0
 #define  BUFFER_CACHE_DISABLE         0

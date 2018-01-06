@@ -67,6 +67,8 @@ Maintainer: Miguel Luis, Gregory Cristian and Wael Guibene
 #include "vcom.h"
 #include "version.h"
 
+#include "uBloxGPS.h"
+
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /*!
@@ -152,6 +154,10 @@ int main( void )
   /* Configure the hardware*/
   HW_Init( );
   
+  GPSInit();
+
+  GPSRead();
+
   /* USER CODE BEGIN 1 */
   /* USER CODE END 1 */
   
