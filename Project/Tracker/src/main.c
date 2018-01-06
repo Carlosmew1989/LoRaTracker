@@ -70,19 +70,7 @@ Maintainer: Miguel Luis, Gregory Cristian and Wael Guibene
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /*!
- * CAYENNE_LPP is myDevices Application server.
- */
-//#define CAYENNE_LPP
-#define LPP_DATATYPE_DIGITAL_INPUT  0x0
-#define LPP_DATATYPE_DIGITAL_OUTPUT 0x1
-#define LPP_DATATYPE_HUMIDITY       0x68
-#define LPP_DATATYPE_TEMPERATURE    0x67
-#define LPP_DATATYPE_BAROMETER      0x73
-
-#define LPP_APP_PORT 99
-
-/*!
- * Defines the application data transmission duty cycle. 5s, value in [ms].
+ * Defines the application data transmission duty cycle. Value in [ms].
  */
 #define APP_TX_DUTYCYCLE                            10000
 /*!
@@ -126,14 +114,12 @@ static LoRaMainCallback_t LoRaMainCallbacks ={ HW_GetBatteryLevel,
  */
 static uint8_t AppLedStateOn = RESET;
 
-
-#ifdef USE_B_L072Z_LRWAN1
 /*!
  * Timer to handle the application Tx Led to toggle
  */
 static TimerEvent_t TxLedTimer;
 static void OnTimerLedEvent( void );
-#endif
+
 /* !
  *Initialises the Lora Parameters
  */
@@ -205,7 +191,6 @@ static void LoraTxData( lora_AppData_t *AppData, FunctionalState* IsTxConfirmed)
   uint8_t batteryLevel;
   sensor_t sensor_data;
   
-#ifdef USE_B_L072Z_LRWAN1
   TimerInit( &TxLedTimer, OnTimerLedEvent );
   
   TimerSetValue(  &TxLedTimer, 200);
@@ -213,47 +198,11 @@ static void LoraTxData( lora_AppData_t *AppData, FunctionalState* IsTxConfirmed)
   LED_On( LED_RED1 ) ; 
   
   TimerStart( &TxLedTimer );  
-#endif
-#ifndef CAYENNE_LPP
+
   int32_t latitude, longitude = 0;
   uint16_t altitudeGps = 0;
-#endif
+
   BSP_sensor_Read( &sensor_data );
-
-#ifdef CAYENNE_LPP
-  uint8_t cchannel=0;
-  temperature = ( int16_t )( sensor_data.temperature * 10 );     /* in °C * 10 */
-  pressure    = ( uint16_t )( sensor_data.pressure * 100 / 10 );  /* in hPa / 10 */
-  humidity    = ( uint16_t )( sensor_data.humidity * 2 );        /* in %*2     */
-  uint32_t i = 0;
-
-  batteryLevel = HW_GetBatteryLevel( );                     /* 1 (very low) to 254 (fully charged) */
-
-  AppData->Port = LPP_APP_PORT;
-  
-  *IsTxConfirmed =  LORAWAN_CONFIRMED_MSG;
-  AppData->Buff[i++] = cchannel++;
-  AppData->Buff[i++] = LPP_DATATYPE_BAROMETER;
-  AppData->Buff[i++] = ( pressure >> 8 ) & 0xFF;
-  AppData->Buff[i++] = pressure & 0xFF;
-  AppData->Buff[i++] = cchannel++;
-  AppData->Buff[i++] = LPP_DATATYPE_TEMPERATURE; 
-  AppData->Buff[i++] = ( temperature >> 8 ) & 0xFF;
-  AppData->Buff[i++] = temperature & 0xFF;
-  AppData->Buff[i++] = cchannel++;
-  AppData->Buff[i++] = LPP_DATATYPE_HUMIDITY;
-  AppData->Buff[i++] = humidity & 0xFF;
-#if defined( REGION_US915 ) || defined( REGION_US915_HYBRID ) || defined ( REGION_AU915 )
-  /* The maximum payload size does not allow to send more data for lowest DRs */
-#else
-  AppData->Buff[i++] = cchannel++;
-  AppData->Buff[i++] = LPP_DATATYPE_DIGITAL_INPUT; 
-  AppData->Buff[i++] = batteryLevel*100/254;
-  AppData->Buff[i++] = cchannel++;
-  AppData->Buff[i++] = LPP_DATATYPE_DIGITAL_OUTPUT; 
-  AppData->Buff[i++] = AppLedStateOn;
-#endif  /* REGION_XX915 */
-#else  /* not CAYENNE_LPP */
 
   temperature = ( int16_t )( sensor_data.temperature * 100 );     /* in °C * 100 */
   pressure    = ( uint16_t )( sensor_data.pressure * 100 / 10 );  /* in hPa / 10 */
@@ -268,19 +217,6 @@ static void LoraTxData( lora_AppData_t *AppData, FunctionalState* IsTxConfirmed)
   
   *IsTxConfirmed =  LORAWAN_CONFIRMED_MSG;
 
-#if defined( REGION_US915 ) || defined( REGION_US915_HYBRID ) || defined ( REGION_AU915 )
-  AppData->Buff[i++] = AppLedStateOn;
-  AppData->Buff[i++] = ( pressure >> 8 ) & 0xFF;
-  AppData->Buff[i++] = pressure & 0xFF;
-  AppData->Buff[i++] = ( temperature >> 8 ) & 0xFF;
-  AppData->Buff[i++] = temperature & 0xFF;
-  AppData->Buff[i++] = ( humidity >> 8 ) & 0xFF;
-  AppData->Buff[i++] = humidity & 0xFF;
-  AppData->Buff[i++] = batteryLevel;
-  AppData->Buff[i++] = 0;
-  AppData->Buff[i++] = 0;
-  AppData->Buff[i++] = 0;
-#else  /* not REGION_XX915 */
   AppData->Buff[i++] = AppLedStateOn;
   AppData->Buff[i++] = ( pressure >> 8 ) & 0xFF;
   AppData->Buff[i++] = pressure & 0xFF;
@@ -297,8 +233,7 @@ static void LoraTxData( lora_AppData_t *AppData, FunctionalState* IsTxConfirmed)
   AppData->Buff[i++] = longitude & 0xFF;
   AppData->Buff[i++] = ( altitudeGps >> 8 ) & 0xFF;
   AppData->Buff[i++] = altitudeGps & 0xFF;
-#endif  /* REGION_XX915 */
-#endif  /* CAYENNE_LPP */
+
   AppData->BuffSize = i;
   
   /* USER CODE END 3 */
@@ -327,22 +262,7 @@ static void LoraRxData( lora_AppData_t *AppData )
       //GpioWrite( &Led3, ( ( AppLedStateOn & 0x01 ) != 0 ) ? 0 : 1 );
     }
     break;
-  case LPP_APP_PORT:
-  {
-    AppLedStateOn= (AppData->Buff[2] == 100) ?  0x01 : 0x00;
-      if ( AppLedStateOn == RESET )
-      {
-        PRINTF("LED OFF\n\r");
-        LED_Off( LED_BLUE ) ; 
-        
-      }
-      else
-      {
-        PRINTF("LED ON\n\r");
-        LED_On( LED_BLUE ) ; 
-      }
-    break;
-  }
+
   default:
     break;
   }
