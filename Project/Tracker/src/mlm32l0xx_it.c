@@ -75,8 +75,8 @@ Maintainer: Miguel Luis and Gregory Cristian
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
-/* UART handler declared in "main.c" file */
-
+/* UART handler declared in "uBloxGPS.c" file */
+extern UART_HandleTypeDef GPSUartHandle;
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 
@@ -194,7 +194,6 @@ void SysTick_Handler(void)
 /*  available peripheral interrupt handler's name please refer to the startup */
 /*  file (startup_stm32l1xx.s).                                               */
 /******************************************************************************/
-
 /**
   * @brief  This function handles PPP interrupt request.
   * @param  None
@@ -203,6 +202,10 @@ void SysTick_Handler(void)
 /*void PPP_IRQHandler(void)
 {
 }*/
+
+void USART1_IRQHandler(void) {
+	HAL_UART_IRQHandler(&GPSUartHandle);
+}
 
 void USART2_IRQHandler( void )
 {

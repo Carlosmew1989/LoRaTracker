@@ -68,6 +68,98 @@ static UART_HandleTypeDef UartHandle;
 /* Private function prototypes -----------------------------------------------*/
 /* Functions Definition ------------------------------------------------------*/
 
+#include  <errno.h>
+#include  <sys/unistd.h> // STDOUT_FILENO, STDERR_FILENO
+#include  <sys/stat.h>
+
+void stdio_setup(int no_init)
+{
+    if (! no_init)
+    {
+        //UART_Init(0);
+    }
+    // Turn off buffers, so I/O occurs immediately
+    setvbuf(stdin, NULL, _IONBF, 0);
+    setvbuf(stdout, NULL, _IONBF, 0);
+    setvbuf(stderr, NULL, _IONBF, 0);
+}
+
+int _read(int file, char *data, int len)
+{
+    int bytes_read;
+
+    if (file != STDIN_FILENO)
+    {
+        errno = EBADF;
+        return -1;
+    }
+
+    for (bytes_read = 0; bytes_read < len; bytes_read++)
+    {
+        //*data = (char) UART_RxBlocking();
+        data++;
+    }
+
+    return bytes_read;
+}
+
+int _write(int file, char *data, int len)
+{
+   if ((file != STDOUT_FILENO) && (file != STDERR_FILENO))
+   {
+      errno = EBADF;
+      return -1;
+   }
+
+   // arbitrary timeout 1000
+   HAL_StatusTypeDef status =
+      HAL_UART_Transmit(&UartHandle, (uint8_t*)data, len, 1000);
+
+   // return # of bytes written - as best we can tell
+   return (status == HAL_OK ? len : 0);
+}
+
+int _close(int file)
+{
+    return -1;
+}
+
+/******************************************************************************
+ *
+ ******************************************************************************/
+
+int _lseek(int file, int ptr, int dir)
+{
+    return 0;
+}
+
+/******************************************************************************
+ *
+ ******************************************************************************/
+
+int _fstat(int file, struct stat *st)
+{
+    st->st_mode = S_IFCHR;
+    return 0;
+}
+
+/******************************************************************************
+ *
+ ******************************************************************************/
+
+int _isatty(int file)
+{
+    if ((file == STDOUT_FILENO) ||
+        (file == STDIN_FILENO) ||
+        (file == STDERR_FILENO))
+    {
+        return 1;
+    }
+
+    errno = EBADF;
+    return 0;
+}
+
 void vcom_Init(void)
 {
   /*## Configure the UART peripheral ######################################*/
@@ -189,26 +281,34 @@ void vcom_Send_Lp( char *format, ... )
   
   va_end(args);
 }
-/**
-  * @brief UART MSP Initialization 
-  *        This function configures the hardware resources used in this example: 
-  *           - Peripheral's clock enable
-  *           - Peripheral's GPIO Configuration  
-  *           - NVIC configuration for UART interrupt request enable
-  * @param huart: UART handle pointer
-  * @retval None
-  */
-void HAL_UART_MspInit(UART_HandleTypeDef *huart)
-{
-  
-  /*##-1- Enable peripherals and GPIO Clocks #################################*/
 
-  /* Enable USART1 clock */
-  USARTX_CLK_ENABLE(); 
-  
-  /*##-2- Configure peripheral GPIO ##########################################*/  
-  vcom_IoInit( );
-}
+
+
+//#include "uBloxGPS.h"
+///**
+//  * @brief UART MSP Initialization
+//  *        This function configures the hardware resources used in this example:
+//  *           - Peripheral's clock enable
+//  *           - Peripheral's GPIO Configuration
+//  *           - NVIC configuration for UART interrupt request enable
+//  * @param huart: UART handle pointer
+//  * @retval None
+//  */
+//void HAL_UART_MspInit(UART_HandleTypeDef *huart)
+//{
+//
+//  /*##-1- Enable peripherals and GPIO Clocks #################################*/
+//
+//  /* Enable USART1 clock */
+//  USARTX_CLK_ENABLE();
+//
+//  /*##-2- Configure peripheral GPIO ##########################################*/
+//  vcom_IoInit( );
+//
+//  GPSInitGPIO();
+//
+//}
+
 
 void vcom_IoInit(void)
 {

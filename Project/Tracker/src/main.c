@@ -140,8 +140,7 @@ static  LoRaParam_t LoRaParamInit= {TX_ON_TIMER,
   * @param  None
   * @retval None
   */
-int main( void )
-{
+int main( void ) {
   /* STM32 HAL library initialization*/
   HAL_Init( );
   
@@ -156,7 +155,29 @@ int main( void )
   
   GPSInit();
 
-  GPSRead();
+  GPSData_t gData = {0};
+  float speedKmh = 0.0;
+
+  while(1) {
+
+	  if(GPSDataReadyFlag) {
+
+		  GPSReadData(&gData);
+
+		  if(gData.fixQuality > 0) {
+			  printf("Got fix!\n");
+			  printf("Time: %lu --- Date: %lu\n", gData.time, gData.date);
+			  printf("Lat.: %ld --- Lon.: %ld\n", gData.latitude, gData.longitude);
+			  printf("Fix quality: %u --- Satellites tracked: %u\n", gData.fixQuality, gData.nSatellites);
+
+			  speedKmh = ((float)gData.speed/(float)gData.speedScale) * 1.852;
+			  printf("Speed (Knots): %d --- SpeedScale (Knots): %u --- Speed km/h: %f\n", gData.speed, gData.speedScale, speedKmh);
+		  }
+
+		  GPSDataReadyFlag = 0;
+	  }
+
+  }
 
   /* USER CODE BEGIN 1 */
   /* USER CODE END 1 */
@@ -164,7 +185,7 @@ int main( void )
   /* Configure the Lora Stack*/
   lora_Init( &LoRaMainCallbacks, &LoRaParamInit);
   
-  PRINTF("First LoRa Test!\n");
+  printf("First LoRa Test!\n");
 
   /* main loop*/
   while( 1 )
@@ -256,13 +277,13 @@ static void LoraRxData( lora_AppData_t *AppData )
       AppLedStateOn = AppData->Buff[0] & 0x01;
       if ( AppLedStateOn == RESET )
       {
-        PRINTF("LED OFF\n\r");
+        printf("LED OFF\n\r");
         LED_Off( LED_BLUE ) ; 
         
       }
       else
       {
-        PRINTF("LED ON\n\r");
+        printf("LED ON\n\r");
         LED_On( LED_BLUE ) ; 
       }
       //GpioWrite( &Led3, ( ( AppLedStateOn & 0x01 ) != 0 ) ? 0 : 1 );
