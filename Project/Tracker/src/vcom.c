@@ -282,34 +282,6 @@ void vcom_Send_Lp( char *format, ... )
   va_end(args);
 }
 
-
-
-//#include "uBloxGPS.h"
-///**
-//  * @brief UART MSP Initialization
-//  *        This function configures the hardware resources used in this example:
-//  *           - Peripheral's clock enable
-//  *           - Peripheral's GPIO Configuration
-//  *           - NVIC configuration for UART interrupt request enable
-//  * @param huart: UART handle pointer
-//  * @retval None
-//  */
-//void HAL_UART_MspInit(UART_HandleTypeDef *huart)
-//{
-//
-//  /*##-1- Enable peripherals and GPIO Clocks #################################*/
-//
-//  /* Enable USART1 clock */
-//  USARTX_CLK_ENABLE();
-//
-//  /*##-2- Configure peripheral GPIO ##########################################*/
-//  vcom_IoInit( );
-//
-//  GPSInitGPIO();
-//
-//}
-
-
 void vcom_IoInit(void)
 {
   GPIO_InitTypeDef  GPIO_InitStruct={0};

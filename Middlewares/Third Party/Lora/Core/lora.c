@@ -80,7 +80,7 @@ Maintainer: Miguel Luis, Gregory Cristian and Wael Guibene
  */
 #define LORAWAN_DUTYCYCLE_ON                        true
 
-#define USE_SEMTECH_DEFAULT_CHANNEL_LINEUP          0
+#define USE_SEMTECH_DEFAULT_CHANNEL_LINEUP          1
 
 #if( USE_SEMTECH_DEFAULT_CHANNEL_LINEUP == 1 ) 
 
@@ -761,6 +761,10 @@ void lora_fsm( void)
       break;
     }
   }
+}
+
+void setTxDutyCycleTime(uint32_t dcTime) {
+	LoRaParamInit->TxDutyCycleTime = dcTime;
 }
 
 

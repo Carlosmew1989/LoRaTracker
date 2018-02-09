@@ -63,6 +63,8 @@ Maintainer: Miguel Luis and Gregory Cristian
 #include "bsp.h"
 #include "vcom.h"
 
+#include "adaGPS.h"
+
 /*!
  *  \brief Unique Devices IDs register set ( STM32L0xxx )
  */
@@ -178,6 +180,8 @@ static void HW_IoInit( void )
   Radio.IoInit( );
   
   vcom_IoInit( );
+
+  GPSIoInit();
 }
 
 /**

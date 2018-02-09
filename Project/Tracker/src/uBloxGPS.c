@@ -181,7 +181,6 @@ void parseNMEA(char *nmeaSentence, GPSData_t *gData) {
 	}break;
 
 	}
-
 }
 
 static void OnGPSRxTimeout() {
@@ -248,5 +247,4 @@ void GPSIoInit(UART_HandleTypeDef *huart) {
 	/* NVIC for USART, to catch the TX complete */
 	HAL_NVIC_SetPriority(GPS_USART_IRQn, 0, 1);
 	HAL_NVIC_EnableIRQ(GPS_USART_IRQn);
-
 }

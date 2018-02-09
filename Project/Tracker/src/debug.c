@@ -108,9 +108,8 @@ void DBG_Init( void )
   * @param None
   * @retval None
   */
-void Error_Handler(void)
-{
-  printf("Error_Handler\n\r");
+void Error_Handler(void) {
+  LED_On(LED4);
   while(1);
 }
 

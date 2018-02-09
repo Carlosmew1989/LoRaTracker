@@ -209,7 +209,10 @@ typedef struct sLoRaMainCallback
 
 /* External variables --------------------------------------------------------*/
 /* Exported macros -----------------------------------------------------------*/
-/* Exported functions ------------------------------------------------------- */ 
+/* Exported functions ------------------------------------------------------- */
+
+void setTxDutyCycleTime(uint32_t dcTime);
+
 /**
  * @brief Lora Initialisation
  * @param [IN] LoRaMainCallback_t

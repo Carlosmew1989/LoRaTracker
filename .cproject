@@ -72,6 +72,7 @@
 							</tool>
 						</toolChain>
 					</folderInfo>
+					<fileInfo id="fr.ac6.managedbuild.config.gnu.cross.exe.debug.1697499275.207012590" name="uBloxGPS.h" rcbsApplicability="disable" resourcePath="Project/Tracker/inc/uBloxGPS.h" toolsToInvoke=""/>
 					<folderInfo id="fr.ac6.managedbuild.config.gnu.cross.exe.debug.1697499275.415216802" name="/" resourcePath="Drivers">
 						<toolChain id="fr.ac6.managedbuild.toolchain.gnu.cross.exe.debug.1803514123" name="Ac6 STM32 MCU GCC" superClass="fr.ac6.managedbuild.toolchain.gnu.cross.exe.debug" unusedChildren="">
 							<option id="fr.ac6.managedbuild.option.gnu.cross.mcu.1899994349.621654732" name="Mcu" superClass="fr.ac6.managedbuild.option.gnu.cross.mcu.1899994349"/>
@@ -98,7 +99,7 @@
 					<sourceEntries>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Drivers"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Middlewares"/>
-						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Project"/>
+						<entry excluding="Tracker/inc/uBloxGPS.h|Tracker/src/uBloxGPS.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Project"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="startup"/>
 					</sourceEntries>
 				</configuration>

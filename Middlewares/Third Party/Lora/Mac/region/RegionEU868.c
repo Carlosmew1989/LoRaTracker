@@ -947,6 +947,8 @@ bool RegionEU868NextChannel( NextChanParams_t* nextChanParams, uint8_t* channel,
 
     if( nbEnabledChannels > 0 )
     {
+    	printf("RegionEU868NextChannel: nbEnabledChannels: %u\n", nbEnabledChannels);
+
         // We found a valid channel
         *channel = enabledChannels[randr( 0, nbEnabledChannels - 1 )];
 
@@ -957,6 +959,8 @@ bool RegionEU868NextChannel( NextChanParams_t* nextChanParams, uint8_t* channel,
     {
         if( delayTx > 0 )
         {
+        	printf("RegionEU868NextChannel: nextTxDelay: %lu\n", nextTxDelay);
+
             // Delay transmission due to AggregatedTimeOff or to a band time off
             *time = nextTxDelay;
             return true;
